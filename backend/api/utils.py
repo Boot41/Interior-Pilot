@@ -5,6 +5,13 @@ from io import BytesIO
 import os
 from typing import Dict, Any, Tuple, Optional
 from django.conf import settings
+from datetime import datetime
+import uuid
+import logging
+import boto3
+from botocore.exceptions import NoCredentialsError
+
+logger = logging.getLogger(__name__)
 
 def encode_image(image_path: str) -> str:
     """
@@ -12,20 +19,14 @@ def encode_image(image_path: str) -> str:
     """
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode('utf-8')
-
+"""
 def image_to_text(image_path: str) -> str:
-    """
-    Get a description of the room layout from an image using BLIP model
-    """
     url = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
     headers = {"Authorization": f"Bearer {settings.HF_API_KEY}"}
     
     data = {
         "image": encode_image(image_path),
-        "question": """Analyze the given image and describe the room layout in detail, including 
-        the furniture arrangement, wall colors, flooring, lighting, and any decorative elements. 
-        Also, mention the style of the room (modern, minimalistic, traditional, etc.). 
-        If the image contains windows or doors, include their placement."""
+        "question": ""
     }
 
     try:
@@ -39,7 +40,7 @@ def image_to_text(image_path: str) -> str:
     except Exception as e:
         print(f"Error in image_to_text: {str(e)}")
         return ""
-
+"""
 def generate_prompt(preferences: Dict[str, Any], layout_description: str = "") -> str:
     """
     Generate a detailed prompt based on user preferences and room layout
@@ -96,7 +97,7 @@ def generate_interior_design(image_path: str, preferences: Dict[str, Any]) -> Tu
     """
     try:
         # Get room layout description
-        layout_description = image_to_text(image_path)
+        layout_description = "An image showing a room layout."#image_to_text(image_path)
         
         # Generate prompt
         prompt_data = generate_prompt(preferences, layout_description)
@@ -130,3 +131,27 @@ def generate_interior_design(image_path: str, preferences: Dict[str, Any]) -> Tu
         raise Exception(f"API Request failed: {error_msg}")
     except Exception as e:
         raise Exception(f"Failed to generate interior design: {str(e)}")
+
+def upload_to_supabase(image_file):
+    try:
+        logger.info("Initializing S3 client for Supabase")
+        
+        # Initialize a session using Supabase S3 credentials
+        s3 = boto3.client(
+            service_name='s3',
+            region_name=os.getenv('SUPERBASE_REGION'),
+            endpoint_url=os.getenv('SUPERBASE_ENDPOINT'),
+            aws_access_key_id=os.getenv('SUPERBASE_ACCESS_KEY'),
+            aws_secret_access_key=os.getenv('SUPERBASE_SECRET_KEY')
+        )
+
+        with open("/home/usman/Downloads/layout.png", 'rb') as f:
+            s3.upload_fileobj(f, Bucket=os.getenv('SUPERBASE_BUCKET'), Key=image_file.name)
+        
+
+    except NoCredentialsError:
+        logger.error("Credentials not available.")
+        raise Exception("Credentials not available.")
+    except Exception as e:
+        logger.error(f"Error uploading to Supabase: {str(e)}")
+        raise Exception(f"Error uploading to Supabase: {str(e)}")

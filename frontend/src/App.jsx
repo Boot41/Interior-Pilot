@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Upload from "./pages/Upload";
+import GenerateLayout from "./pages/GenerateLayout";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/process" element={<Process />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/generate-layout" element={<GenerateLayout />} />
       </Routes>
     </Router>
   );

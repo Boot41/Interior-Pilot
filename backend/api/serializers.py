@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import FloorPlan, InteriorDesign, DesignStyle, DesignPreference
 
+class Generate3DLayoutRequestSerializer(serializers.Serializer):
+    image = serializers.URLField(required=True)
+    prompt = serializers.CharField(required=True)
+
 class DesignStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = DesignStyle

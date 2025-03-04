@@ -11,7 +11,122 @@ from .serializers import (
     FloorPlanSerializer, InteriorDesignSerializer, DesignStyleSerializer,
     DesignPreferenceSerializer, DesignGenerationRequestSerializer
 )
-from .utils import generate_interior_design
+from .utils import generate_interior_design, upload_to_supabase
+from rest_framework.views import APIView
+from .serializers import Generate3DLayoutRequestSerializer
+import replicate
+from rest_framework.parsers import MultiPartParser, FormParser
+import boto3
+import os
+from datetime import datetime
+import uuid
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+AWS_BUCKET_NAME = "interior-pilot"
+AWS_REGION = "ap-south-1"
+
+s3_client = boto3.client(
+    "s3",
+    aws_access_key_id="AKIA34AMDGM5RKE45URB",
+    aws_secret_access_key="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",
+    region_name=AWS_REGION,
+)
+
+class UploadImageView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    def post(self, request):
+        try:
+            if 'image' not in request.FILES:
+                return Response(
+                    {'error': 'No image file provided'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            image_file = request.FILES['image']
+            # Generate a unique filename to avoid conflicts
+            #file_extension = os.path.splitext(image_file.name)[1]
+            #unique_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}{file_extension}"
+            image_key = f"{image_file.name}"
+
+            try:
+                s3_client.upload_fileobj(
+                    image_file,
+                    AWS_BUCKET_NAME,
+                    image_key,
+                    
+                )
+                
+                file_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{image_key}"
+                return Response({
+                    'url': file_url,
+                    'message': 'Image uploaded successfully'
+                }, status=status.HTTP_200_OK)
+                
+            except Exception as e:
+                logger.error(f"Error uploading to S3: {str(e)}")
+                return Response(
+                    {'error': 'Failed to upload image'}, 
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            
+        except Exception as e:
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class Generate3DLayoutView(APIView):
+    def post(self, request):
+        try:
+            # Configure Replicate client with API token
+            replicate.Client(api_token=os.getenv('REPLICATE_API_TOKEN'))
+            
+            serializer = Generate3DLayoutRequestSerializer(data=request.data)
+            if serializer.is_valid():
+                input_data = {
+                    "seed": 20,
+                    "image": serializer.validated_data['image'],
+                    "prompt": serializer.validated_data['prompt'],
+                    "structure": "hed",
+                    "image_resolution": 512,
+                    "num_outputs": 1,
+                    "scale": 9,
+                    "steps": 20,
+                }
+
+                try:
+                    logger.info(f"Sending request to Replicate API with image: {input_data['image'][:100]}...")
+                    output = replicate.run(
+                        "rossjillian/controlnet:795433b19458d0f4fa172a7ccf93178d2adb1cb8ab2ad6c8fdc33fdbcd49f477",
+                        input=input_data
+                    )
+
+                    output_dir = os.path.join('/home/usman/Documents/Projects/Interior Pilot/backend/media/generated')
+                    os.makedirs(output_dir, exist_ok=True)
+
+                    for index, item in enumerate(output):
+                        file_path = os.path.join(output_dir, f"output_{index + 1}.png")
+                        with open(file_path, "wb") as file:
+                            file.write(item.read())
+
+                    print("3D layout generated successfully")
+                    return Response({"message": "3D layout generated successfully"}, status=status.HTTP_200_OK)
+
+                except Exception as e:
+                    print(str(e))
+                    print(f"Error generating 3D layout: {str(e)}")
+                    return Response({"error": "Failed to generate 3D layout"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            print("Invalid data received")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            print(str(e))
+            print(f"Error handling request: {str(e)}")
+            return Response({"error": "An unexpected error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DesignStyleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DesignStyle.objects.all()
