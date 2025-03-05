@@ -309,7 +309,7 @@ const Upload = () => {
               />
               <div className="mt-4 space-y-2">
                 <h3 className="text-lg font-medium text-[#8B4513]">Design Details</h3>
-                {/* <p className="text-[#6B4423]">{generatedDesign.prompt_used}</p> */}
+                <p className="text-[#6B4423] text-ellipsis">{generatedDesign.prompt_used.slice(0,150)}.....</p>
                 <p className="text-sm text-[#6B4423]/80">Processing Time: {generatedDesign.processing_time.toFixed(2)}s</p>
               </div>
             </div>
