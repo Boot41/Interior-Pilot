@@ -18,7 +18,7 @@ const Home = () => {
             Where AI Meets Interior Design
           </motion.h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white">Transform your space with our intelligent design assistant</p>
-          <Link to="/upload" className="bg-[#DAA520] hover:bg-[#FFD700] text-primary px-8 py-3 rounded-lg transition-colors duration-200 font-semibold text-white shadow-md hover:shadow-lg transform hover:scale-105">
+          <Link to="/upload" className="bg-[#DAA520] hover:bg-[#FFD700] text-primary px-8 py-3 rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105" style={{ padding: '15px 40px' }}>
             Start Your Project
           </Link>
         </div>
@@ -30,35 +30,20 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-[#8B4513]">Our Services</h2>
           <p className="text-lg md:text-xl text-[#DAA520] text-center mb-12">Experience the future of interior design with our AI-powered solutions</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-1.jpg" alt="AI Design" className="w-full h-48 object-cover mb-4" />
+            <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
+              <img src="/images/feature-1.avif" alt="AI Design" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">AI-Powered Design</h3>
               <p className="text-[#6B4423]">Get instant design suggestions based on your space and preferences</p>
             </div>
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-2.jpg" alt="Virtual Staging" className="w-full h-48 object-cover mb-4" />
-              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Virtual Staging</h3>
-              <p className="text-[#6B4423]">Visualize your space with different furniture and decor options</p>
+            <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
+              <img src="/images/feature-2.jpg" alt="Virtual Staging" className="w-full h-48 object-cover mb-4 rounded-xl" />
+              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Layout Generation</h3>
+              <p className="text-[#6B4423]">Visualize your Floorplan with 3D layouts, furniture and decor options</p>
             </div>
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-3.jpg" alt="Interior Consultation" className="w-full h-48 object-cover mb-4" />
-              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Interior Consultation</h3>
-              <p className="text-[#6B4423]">Get expert advice tailored to your design needs</p>
-            </div>
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-4.jpg" alt="3D Visualization" className="w-full h-48 object-cover mb-4" />
+            <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
+              <img src="/images/feature-4.jpg" alt="3D Visualization" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">3D Visualization</h3>
               <p className="text-[#6B4423]">See your designs come to life with realistic 3D models</p>
-            </div>
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-5.jpg" alt="Budget-Friendly Options" className="w-full h-48 object-cover mb-4" />
-              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Budget-Friendly Options</h3>
-              <p className="text-[#6B4423]">Affordable design solutions without compromising quality</p>
-            </div>
-            <div className="bg-[#F1C376] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-6.jpg" alt="Customer Testimonials" className="w-full h-48 object-cover mb-4" />
-              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Customer Testimonials</h3>
-              <p className="text-[#6B4423]">Hear from our satisfied clients about their experiences</p>
             </div>
           </div>
         </div>

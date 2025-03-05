@@ -19,28 +19,48 @@ def encode_image(image_path: str) -> str:
     """
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode('utf-8')
-"""
-def image_to_text(image_path: str) -> str:
-    url = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-    headers = {"Authorization": f"Bearer {settings.HF_API_KEY}"}
-    
-    data = {
-        "image": encode_image(image_path),
-        "question": ""
+
+import requests
+from django.conf import settings
+
+def image_to_text(image_path: str) -> Dict[str, Any]:
+    # Define the headers for the API request
+    headers = {
+        "Authorization": f"Bearer {settings.HF_API_KEY}",
     }
 
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()
-        
-        result = response.json()
-        if isinstance(result, list) and len(result) > 0:
-            return result[0].get("generated_text", "")
-        return ""
-    except Exception as e:
-        print(f"Error in image_to_text: {str(e)}")
-        return ""
-"""
+    # Prepare the files for the classification request
+    data = {
+        "image": encode_image(image_path)
+    }
+
+    # Classification request
+    classification_url = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50"
+    classification_response = requests.post(classification_url, headers=headers, json=data)
+
+    if classification_response.status_code != 200:
+        raise Exception(f"Error in classification: {classification_response.text}")
+
+    classification_result = classification_response.json()
+    
+    # Prepare the files for the segmentation request
+    data2 = {
+        "inputs": encode_image(image_path)
+    }
+    # Segmentation request
+    segmentation_url = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50-panoptic"
+    segmentation_response = requests.post(segmentation_url, headers=headers, json=data2)
+
+    if segmentation_response.status_code != 200:
+        raise Exception(f"Error in segmentation: {segmentation_response.text}")
+
+    segmentation_result = segmentation_response.json()
+
+    return {
+        "classification": classification_result,
+        "segmentation": segmentation_result
+    }
+
 def generate_prompt(preferences: Dict[str, Any], layout_description: str = "") -> str:
     """
     Generate a detailed prompt based on user preferences and room layout
@@ -95,9 +115,10 @@ def generate_interior_design(image_path: str, preferences: Dict[str, Any]) -> Tu
     """
     Generate interior design using the complete pipeline
     """
+    print(image_path)
     try:
         # Get room layout description
-        layout_description = "An image showing a room layout."#image_to_text(image_path)
+        layout_description = image_to_text(image_path)
         
         # Generate prompt
         prompt_data = generate_prompt(preferences, layout_description)
