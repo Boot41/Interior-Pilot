@@ -104,16 +104,18 @@ class Generate3DLayoutView(APIView):
                         input=input_data
                     )
 
-                    output_dir = os.path.join('/home/usman/Documents/Projects/Interior Pilot/backend/media/generated')
+                    output_dir = '/home/usman/Documents/Projects/Interior Pilot/backend/media/generated'
                     os.makedirs(output_dir, exist_ok=True)
 
+                    image_urls = []
+                    base_url = request.build_absolute_uri('/media/generated/')
                     for index, item in enumerate(output):
                         file_path = os.path.join(output_dir, f"output_{index + 1}.png")
                         with open(file_path, "wb") as file:
                             file.write(item.read())
+                        image_urls.append(f"{base_url}output_{index + 1}.png")
 
-                    print("3D layout generated successfully")
-                    return Response({"message": "3D layout generated successfully"}, status=status.HTTP_200_OK)
+                    return Response({"message": "3D layout generated successfully", "image_urls": image_urls}, status=status.HTTP_200_OK)
 
                 except Exception as e:
                     print(str(e))
