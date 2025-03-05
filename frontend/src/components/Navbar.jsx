@@ -25,11 +25,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#F1C376] shadow-md py-3' : 'bg-transparent py-4'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#F1C376] shadow-md py-3' : ':has(~ .has-overlay) ? bg-[#F1C376]/20 backdrop-blur-sm : bg-transparent py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <span className={`text-2xl font-bold ${isScrolled ? 'text-white' : 'text-secondary'}`}>
+            <span className={`text-2xl font-bold ${isScrolled ? 'text-white' : ':has(~ .has-overlay) ? text-white text-shadow-glow : text-secondary'}`}>
               Interior Pilot
             </span>
           </Link>
@@ -38,7 +38,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`nav-link hover:text-golden-light transition-colors duration-200 ${location.pathname === link.path ? 'text-white' : ''} ${isScrolled ? 'text-primary hover:text-golden' : 'text-secondary'}`}
+                className={`nav-link transition-all duration-200 ${isScrolled ? 'text-white hover:text-[#DAA520]' : ':has(~ .has-overlay) ? text-[#DAA520] font-medium : text-white/90 hover:text-[#DAA520]'} ${location.pathname === link.path ? '!text-[#8B4513] font-semibold' : ''}`}
               >
                 {link.label}
               </Link>
