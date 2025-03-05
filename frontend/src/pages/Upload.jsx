@@ -116,7 +116,7 @@ const Upload = () => {
             {/* File Upload */}
             <div>
               <label className="block text-xl font-semibold text-[#8B4513] mb-4 relative">
-                Upload Floor Plan
+                Upload Design
                 <span className="text-red-500 absolute -top-1">*</span>
               </label>
               <div

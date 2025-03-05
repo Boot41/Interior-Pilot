@@ -1,5 +1,6 @@
 import os
 import time
+from botocore.serialize import Serializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -83,19 +84,19 @@ class Generate3DLayoutView(APIView):
         try:
             # Configure Replicate client with API token
             replicate.Client(api_token=os.getenv('REPLICATE_API_TOKEN'))
-            
+            base = "Use this exact floor plan of **THE GIVEN ROOM** to generate a realistic 3D interior layout **ONLY FOR ONE GIVEN ROOM. DON'T ADD ANY OTHER ROOM**"
             serializer = Generate3DLayoutRequestSerializer(data=request.data)
             if serializer.is_valid():
                 input_data = {
-                    "seed": 20,
-                    "image": serializer.validated_data['image'],
-                    "prompt": serializer.validated_data['prompt'],
-                    "structure": "hed",
-                    "image_resolution": 512,
-                    "num_outputs": 1,
-                    "scale": 9,
-                    "steps": 20,
-                }
+                "image": serializer.validated_data['image'],
+                "prompt": serializer.validated_data['prompt'] + base,
+                "structure": "hed",
+                "image_resolution": 512,
+                "num_outputs": 1,
+                "scale": 15,
+                "steps": 20,
+                "negative_prompt": "empty room, no furniture, missing objects, blank space, extra rooms",
+            }
 
                 try:
                     logger.info(f"Sending request to Replicate API with image: {input_data['image'][:100]}...")

@@ -1,27 +1,65 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Slider from 'react-slick'; // Import the carousel component
+import 'slick-carousel/slick/slick.css'; // Import slick CSS
+import 'slick-carousel/slick/slick-theme.css'; // Import slick theme CSS
 
 const Home = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500, // Adjust speed to be faster
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000, // Set autoplay speed to 2000ms (2 seconds)
+    arrows: true, // Enable navigation arrows
+  };
+
   return (
     <div className="min-h-screen bg-[#F1C376]">
-      {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/hero-bg.webp")' }} />
-        <div className="absolute inset-0 bg-primary bg-opacity-50 z-10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
-          <motion.h1 
-            className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-[#DAA520]"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Where AI Meets Interior Design
-          </motion.h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white">Transform your space with our intelligent design assistant</p>
-          <Link to="/upload" className="bg-[#DAA520] hover:bg-[#FFD700] text-primary px-8 py-3 rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105" style={{ padding: '15px 40px' }}>
-            Start Your Project
-          </Link>
-        </div>
+        <Slider {...settings}>
+          {/* Hero Slide */}
+          <div className="relative h-screen w-full overflow-hidden">
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/hero-bg.webp")' }} />
+            <div className="absolute inset-0 bg-primary bg-opacity-50 z-10" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-[#DAA520]"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                Where AI Meets Interior Design
+              </motion.h1>
+              <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white">Transform your space with our intelligent design assistant</p>
+              <Link to="/upload" className="bg-[#DAA520] hover:bg-[#FFD700] text-primary px-8 py-3 rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105">
+                Start Your Project
+              </Link>
+            </div>
+          </div>
+
+          {/* Carousel Slide for GenerateLayout */}
+          <div className="relative h-screen w-full overflow-hidden">
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/—Pngtree—3d interior design of ground_5784954.jpg")' }} />
+            <div className="absolute inset-0 bg-primary bg-opacity-50 z-10" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-[#DAA520]"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                Generate Your 3D Layout
+              </motion.h1>
+              <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white">Transform your space with our intelligent design assistant</p>
+              <Link to="/generate-layout" className="bg-[#DAA520] hover:bg-[#FFD700] text-primary px-8 py-3 rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105">
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </Slider>
       </section>
 
       {/* Features Section */}
