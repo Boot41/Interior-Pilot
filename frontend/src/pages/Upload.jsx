@@ -161,7 +161,7 @@ const Upload = () => {
                         />
                       </svg>
                       <p className="mt-4 text-lg text-[#8B4513] font-medium">
-                        Drop your floor plan here
+                        Drop your design here
                       </p>
                       <p className="mt-2 text-sm text-[#6B4423]">
                         or click to select a file
