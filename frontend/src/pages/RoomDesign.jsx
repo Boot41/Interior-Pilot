@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { downloadImage } from '../utils';
 const RoomDesign = () => {
     const fileInputRef = useRef(null);
     const [image, setImage] = useState(null);
@@ -277,21 +277,21 @@ const RoomDesign = () => {
 
                         {generatedImage && (
                             <div className="relative group">
-                                <img 
-                                    src={generatedImage} 
-                                    alt="Generated Design" 
-                                    className="w-full rounded-lg shadow-lg"
-                                />
-                                <a 
-                                    href={generatedImage}
-                                    download
-                                    className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
-                                >
-                                    <button className="bg-white px-4 py-2 rounded-lg text-[#8B4513] font-semibold">
-                                        Download Image
-                                    </button>
-                                </a>
-                            </div>
+                            <img 
+                                src={generatedImage} 
+                                alt="Generated Design"
+                                className="w-full rounded-lg shadow-lg"
+                            />
+                            <a 
+                            href={generatedImage}
+                            download
+                            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                        >
+                            <button className="bg-white px-4 py-2 rounded-lg text-[#8B4513] font-semibold">
+                                Download Image
+                            </button>
+                        </a>
+                        </div>
                         )}
 
                         {!generatedImage && !loading && (
@@ -310,8 +310,8 @@ const RoomDesign = () => {
                                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                 />
                             </svg>
-              <p className="text-[#6B4423] font-medium">Your generated design will appear here</p>
-              <p className="text-[#6B4423]/60 text-center text-sm">Upload an image and fill your preferences to generate a design</p>
+                                <p className="text-[#6B4423] font-medium">Your generated design will appear here</p>
+                                <p className="text-[#6B4423]/60 text-center text-sm">Upload an image and fill your preferences to generate a design</p>
               
                                 </div>
                             </div>

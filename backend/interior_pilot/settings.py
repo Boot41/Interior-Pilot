@@ -85,15 +85,8 @@ WSGI_APPLICATION = 'interior_pilot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB", "interior_pilot"),
-        'USER': os.getenv("POSTGRES_USER", "usmanmufti"),
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "1234567890"),
-        'HOST': os.getenv("POSTGRES_HOST", "localhost"),
-        'PORT': os.getenv("POSTGRES_PORT", "5432"),
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # This will create a SQLite database file in your project directory
     }
 }
 

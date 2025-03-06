@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { generateDesign, getDesignStyles } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { downloadImage } from '../utils';
 const Upload = () => {
   const fileInputRef = useRef(null);
   
@@ -310,15 +310,14 @@ const Upload = () => {
                 alt="Generated Design" 
                 className="w-full rounded-lg shadow-lg"
               />
-              <a 
-                href={`http://localhost:8000/${generatedDesign.generated_image}`}
-                download
-                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+              <div 
+                onClick={() => downloadImage(`http://localhost:8000/${generatedDesign.generated_image}`, 'interior-design.png')}
+                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg cursor-pointer"
               >
                 <button className="bg-white px-4 py-2 rounded-lg text-[#8B4513] font-semibold">
                   Download Image
                 </button>
-              </a>
+              </div>
             </div>
           )}
           {!loading && !generatedDesign && (
