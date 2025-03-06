@@ -5,6 +5,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +18,7 @@ const Navbar = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/projects', label: 'Projects'},
+    { path: '/projects', label: 'Projects' },
     { path: '/services', label: 'Services' },
     { path: '/process', label: 'Our Process' },
     { path: '/about', label: 'About Us' },
@@ -29,7 +30,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <span className={`text-2xl font-bold ${isScrolled ? 'text-white' : ':has(~ .has-overlay) ? text-white text-shadow-glow : text-secondary'}`}>
+            <span className={`text-2xl font-bold ${isHomePage ? 'text-white' : 'text-[#DAA520]'} ${isScrolled ? 'text-white' : ':has(~ .has-overlay) ? text-[#DAA520] text-shadow-glow : text-secondary'}`}>
               Interior Pilot
             </span>
           </Link>
@@ -38,7 +39,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`nav-link transition-all duration-200 ${isScrolled ? 'text-white hover:text-[#DAA520]' : ':has(~ .has-overlay) ? text-[#DAA520] font-medium : text-white/90 hover:text-[#DAA520]'} ${location.pathname === link.path ? '!text-[#8B4513] font-semibold' : ''}`}
+                className={`nav-link transition-all duration-200 font-bold ${isHomePage ? 'text-white' : 'text-[#DAA520]'} ${isScrolled ? 'text-white' : ':has(~ .has-overlay) ? text-[#DAA520] text-shadow-glow : text-secondary'} ${location.pathname === link.path ? '!text-[#8B4513] font-semibold' : ''}`}
               >
                 {link.label}
               </Link>

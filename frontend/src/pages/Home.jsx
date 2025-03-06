@@ -34,7 +34,7 @@ const Home = () => {
                   Where AI Meets Interior Design
                 </h1>
                 <p className="relative z-10 text-xl md:text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-light">Transform your space with our intelligent design assistant</p>
-                <Link to="/upload" className="relative z-10 bg-[#DAA520] hover:bg-[#FFD700] text-primary px-10 py-4 text-lg md:text-xl rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105">
+                <Link to="/room-design" className="relative z-10 bg-[#DAA520] hover:bg-[#FFD700] text-primary px-10 py-4 text-lg md:text-xl rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105">
                   Start Your Project
                 </Link>
               </div>
@@ -57,6 +57,23 @@ const Home = () => {
               </div>
             </div>
           </div>
+
+          {/* Carousel Slide for Upload*/}
+          <div className="relative h-screen w-full overflow-hidden [&:has(.hover-trigger:hover)_.overlay]:opacity-100 [&:has(.hover-trigger:hover)]:has-overlay">
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/upload.png")' }} />
+            <div className="overlay absolute inset-0 transition-all duration-700 ease-in-out opacity-0 bg-black/60 backdrop-blur-sm z-10" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
+              <div className="hover-trigger relative py-10 px-6 text-center hover:cursor-pointer">
+              <h1 className="relative z-10 text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-[#DAA520]">
+                Use Your Inspirations
+              </h1>
+              <p className="relative z-10 text-xl md:text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-light">Transform your space with our intelligent design assistant</p>
+              <Link to="/upload" className="relative z-10 bg-[#DAA520] hover:bg-[#FFD700] text-primary px-10 py-4 text-lg md:text-xl rounded-lg transition-colors duration-200 font-bold text-white shadow-md hover:shadow-lg transform hover:scale-105">
+                Get Started
+              </Link>
+              </div>
+            </div>
+          </div>
         </Slider>
       </section>
 
@@ -74,12 +91,12 @@ const Home = () => {
             <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
               <img src="/images/feature-2.jpg" alt="Virtual Staging" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Layout Generation</h3>
-              <p className="text-[#6B4423]">Visualize your Floorplan with 3D layouts, furniture and decor options</p>
+              <p className="text-[#6B4423]">Visualize your Floorplan with layouts, furniture and decor options</p>
             </div>
             <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-4.jpg" alt="3D Visualization" className="w-full h-48 object-cover mb-4 rounded-xl" />
-              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">3D Visualization</h3>
-              <p className="text-[#6B4423]">See your designs come to life with realistic 3D models</p>
+              <img src="/images/feature-3.png" alt="3D Visualization" className="w-full h-48 object-cover mb-4 rounded-xl" />
+              <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Use Your Inspiration</h3>
+              <p className="text-[#6B4423]">See your existing designs come to life with realistic 3D models</p>
             </div>
           </div>
         </div>

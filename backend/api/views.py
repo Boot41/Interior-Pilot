@@ -12,7 +12,7 @@ from .serializers import (
     FloorPlanSerializer, InteriorDesignSerializer, DesignStyleSerializer,
     DesignPreferenceSerializer, DesignGenerationRequestSerializer, RoomDesignRequestSerializer
 )
-from .utils import generate_interior_design, upload_to_supabase
+from .utils import generate_interior_design
 from rest_framework.views import APIView
 from .serializers import Generate3DLayoutRequestSerializer
 import replicate
@@ -26,13 +26,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-AWS_BUCKET_NAME = "interior-pilot"
-AWS_REGION = "ap-south-1"
+AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+AWS_REGION = os.getenv("AWS_REGION")
 
 s3_client = boto3.client(
     "s3",
-    aws_access_key_id="AKIA34AMDGM5RKE45URB",
-    aws_secret_access_key="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",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     region_name=AWS_REGION,
 )
 
