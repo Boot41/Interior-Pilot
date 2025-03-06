@@ -165,12 +165,18 @@ const GenerateLayout = () => {
                             )}
                         </AnimatePresence>
 
-                        <button 
-                            type="submit" 
-                            className="bg-[#DAA520] text-white px-4 py-2 rounded"
-                            disabled={loading}
+                        <button
+                            type="submit"
+                            disabled={loading || !image}
+                            className={`
+                                w-full py-4 rounded-lg text-white font-semibold text-lg
+                                transition-all duration-300
+                                ${loading || !image
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : 'bg-[#DAA520] hover:bg-[#B8860B] transform hover:scale-105'}
+                            `}
                         >
-                            {loading ? 'Processing...' : 'Generate Layout'}
+                            {loading ? 'Generating...' : 'Generate Layout'}
                         </button>
                     </form>
                 </motion.div>
@@ -182,20 +188,8 @@ const GenerateLayout = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="bg-white/80 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgb(218,165,32,0.1)] p-8 border border-[#DAA520]/20"
                 >
-                    {generatedImages ? (
-                        <div className="space-y-6">
-                            <div className="flex items-center space-x-4 mb-6">
-                                <h2 className="text-2xl font-bold text-[#8B4513]">Generated 3D Layout</h2>
-                                <div className="flex-1 h-px bg-gradient-to-r from-[#DAA520]/40 to-transparent"></div>
-                            </div>
-                            <img
-                                src={generatedImages[0]}
-                                alt="Generated 3D Layout"
-                                className="w-full h-auto rounded-lg shadow-lg"
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-4">
+                    {!generatedImages && !loading && (
+                        <div className="flex flex-col items-center justify-center h-64 border-4 border-dashed border-[#DAA520]/30 rounded-xl">
                             <svg 
                                 className="w-16 h-16 text-[#DAA520]/40" 
                                 fill="none" 
@@ -209,12 +203,31 @@ const GenerateLayout = () => {
                                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                 />
                             </svg>
-                            <p className="text-[#6B4423] text-center text-lg font-medium">
-                                Your generated layout will appear here
-                            </p>
-                            <p className="text-[#6B4423]/60 text-center text-sm">
-                                Upload an image and provide a prompt to get started
-                            </p>
+                            <p className="text-[#6B4423] font-medium">Your generated design will appear here</p>
+                            <p className="text-[#6B4423]/60 text-center text-sm">Upload an image and prompt to generate a layout</p>
+                        </div>
+                    )}
+
+                    {loading && (
+                        <div className="flex items-center justify-center h-64">
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#DAA520]"></div>
+                        </div>
+                    )}
+
+                    {generatedImages && (
+                        <div className="space-y-6">
+                            <div className="flex items-center space-x-4 mb-6">
+                                <h2 className="text-2xl font-bold text-[#8B4513]">Generated Layout</h2>
+                                <div className="flex-1 h-px bg-gradient-to-r from-[#DAA520]/40 to-transparent"></div>
+                            </div>
+                            {generatedImages.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Generated Layout ${index + 1}`}
+                                    className="w-full h-auto rounded-lg shadow-lg"
+                                />
+                            ))}
                         </div>
                     )}
                 </motion.div>

@@ -277,13 +277,16 @@ const Upload = () => {
 
             <button
               type="submit"
-              disabled={loading}
-              className={`w-full flex justify-center py-4 px-6 rounded-lg shadow-lg text-base font-medium transition-all
-                ${loading 
-                  ? 'bg-[#DAA520]/50 text-white cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-[#DAA520] to-[#B8860B] text-white hover:shadow-[0_8px_30px_rgb(218,165,32,0.2)]'}`}
+              disabled={loading || !formData.floorPlanImage}
+              className={`
+                w-full py-4 rounded-lg text-white font-semibold text-lg
+                transition-all duration-300
+                ${loading || !formData.floorPlanImage
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-[#DAA520] hover:bg-[#B8860B] transform hover:scale-105'}
+              `}
             >
-              {loading ? 'Generating Design...' : 'Generate Design'}
+              {loading ? 'Generating...' : 'Generate Design'}
             </button>
           </form>
         </motion.div>
@@ -295,28 +298,47 @@ const Upload = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="bg-white/80 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgb(218,165,32,0.1)] p-8 border border-[#DAA520]/20"
         >
-          {generatedDesign ? (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4 mb-6">
-                <h2 className="text-2xl font-bold text-[#8B4513]">Generated Design</h2>
-                <div className="flex-1 h-px bg-gradient-to-r from-[#DAA520]/40 to-transparent"></div>
-              </div>
-              <img
-                src={`http://localhost:8000/${generatedDesign.generated_image}`}
-                alt="Generated Interior Design"
-                className="w-full h-auto rounded-lg shadow-lg"
-              />
-              <div className="mt-4 space-y-2">
-                <h3 className="text-lg font-medium text-[#8B4513]">Design Details</h3>
-                <p className="text-[#6B4423] text-ellipsis">{generatedDesign.prompt_used.slice(0,150)}.....</p>
-                <p className="text-sm text-[#6B4423]/80">Processing Time: {generatedDesign.processing_time.toFixed(2)}s</p>
-              </div>
+          {loading && (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#DAA520]"></div>
             </div>
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-[#6B4423] text-center">
-                Your generated design will appear here
-              </p>
+          )}
+          {!loading && generatedDesign && (
+            <div className="relative group">
+              <img 
+                src={`http://localhost:8000/${generatedDesign.generated_image}`} 
+                alt="Generated Design" 
+                className="w-full rounded-lg shadow-lg"
+              />
+              <a 
+                href={`http://localhost:8000/${generatedDesign.generated_image}`}
+                download
+                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+              >
+                <button className="bg-white px-4 py-2 rounded-lg text-[#8B4513] font-semibold">
+                  Download Image
+                </button>
+              </a>
+            </div>
+          )}
+          {!loading && !generatedDesign && (
+            <div className="flex flex-col items-center justify-center h-64 border-4 border-dashed border-[#DAA520]/30 rounded-xl">
+              <svg 
+                                className="w-16 h-16 text-[#DAA520]/40" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth="2" 
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+              <p className="text-[#6B4423] font-medium">Your generated design will appear here</p>
+              <p className="text-[#6B4423]/60 text-center text-sm">Upload an image and fill your preferences to generate a design</p>
+              
             </div>
           )}
         </motion.div>

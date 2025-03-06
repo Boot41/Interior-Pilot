@@ -166,16 +166,27 @@ class Generate3DLayoutView(APIView):
                         input=input_data
                     )
 
-                    output_dir = '/home/usman/Documents/Projects/Interior Pilot/backend/media/generated'
-                    os.makedirs(output_dir, exist_ok=True)
-
                     image_urls = []
-                    base_url = request.build_absolute_uri('/media/generated/')
                     for index, item in enumerate(output):
-                        file_path = os.path.join(output_dir, f"output_{index + 1}.png")
-                        with open(file_path, "wb") as file:
-                            file.write(item.read())
-                        image_urls.append(f"{base_url}output_{index + 1}.png")
+                        # Generate a unique filename using UUID
+                        filename = f"generated_layouts/{uuid.uuid4()}.png"
+                        
+                        # Upload to S3
+                        try:
+                            s3_client.put_object(
+                                Bucket=AWS_BUCKET_NAME,
+                                Key=filename,
+                                Body=item.read(),
+                                ContentType='image/png'
+                            )
+                            
+                            # Generate the S3 URL
+                            s3_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{filename}"
+                            image_urls.append(s3_url)
+                            
+                        except Exception as e:
+                            logger.error(f"Error uploading to S3: {str(e)}")
+                            raise Exception("Failed to upload generated image to S3")
 
                     return Response({"message": "3D layout generated successfully", "image_urls": image_urls}, status=status.HTTP_200_OK)
 
