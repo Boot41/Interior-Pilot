@@ -26,7 +26,7 @@ const Home = () => {
         <Slider {...settings}>
           {/* Hero Slide */}
           <div className="relative h-screen w-full overflow-hidden [&:has(.hover-trigger:hover)_.overlay]:opacity-100 [&:has(.hover-trigger:hover)]:has-overlay">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/hero-bg.webp")' }} />
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("static/images/hero-bg.webp")' }} />
             <div className="overlay absolute inset-0 transition-all duration-700 ease-in-out opacity-0 bg-black/60 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
               <div className="hover-trigger relative py-10 px-6 text-center hover:cursor-pointer">
@@ -43,7 +43,7 @@ const Home = () => {
 
           {/* Carousel Slide for GenerateLayout */}
           <div className="relative h-screen w-full overflow-hidden [&:has(.hover-trigger:hover)_.overlay]:opacity-100 [&:has(.hover-trigger:hover)]:has-overlay">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/generate-layout.jpg")' }} />
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("static/images/generate-layout.jpg")' }} />
             <div className="overlay absolute inset-0 transition-all duration-700 ease-in-out opacity-0 bg-black/60 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
               <div className="hover-trigger relative py-10 px-6 text-center hover:cursor-pointer">
@@ -60,7 +60,7 @@ const Home = () => {
 
           {/* Carousel Slide for Upload*/}
           <div className="relative h-screen w-full overflow-hidden [&:has(.hover-trigger:hover)_.overlay]:opacity-100 [&:has(.hover-trigger:hover)]:has-overlay">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/upload.png")' }} />
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("static/images/upload.png")' }} />
             <div className="overlay absolute inset-0 transition-all duration-700 ease-in-out opacity-0 bg-black/60 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-secondary z-20">
               <div className="hover-trigger relative py-10 px-6 text-center hover:cursor-pointer">
@@ -84,17 +84,17 @@ const Home = () => {
           <p className="text-lg md:text-xl text-[#DAA520] text-center mb-12">Experience the future of interior design with our AI-powered solutions</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-1.avif" alt="AI Design" className="w-full h-48 object-cover mb-4 rounded-xl" />
+              <img src="static/images/feature-1.avif" alt="AI Design" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">AI-Powered Design</h3>
               <p className="text-[#6B4423]">Get instant design suggestions based on your space and preferences</p>
             </div>
             <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-2.jpg" alt="Virtual Staging" className="w-full h-48 object-cover mb-4 rounded-xl" />
+              <img src="static/images/feature-2.jpg" alt="Virtual Staging" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Layout Generation</h3>
               <p className="text-[#6B4423]">Visualize your Floorplan with layouts, furniture and decor options</p>
             </div>
             <div className="bg-[#F1C376] p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-[#DAA520]/20">
-              <img src="/images/feature-3.png" alt="3D Visualization" className="w-full h-48 object-cover mb-4 rounded-xl" />
+              <img src="static/images/feature-3.png" alt="3D Visualization" className="w-full h-48 object-cover mb-4 rounded-xl" />
               <h3 className="text-xl font-bold mb-2 text-[#8B4513]">Use Your Inspiration</h3>
               <p className="text-[#6B4423]">See your existing designs come to life with realistic 3D models</p>
             </div>
