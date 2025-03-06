@@ -148,27 +148,3 @@ def generate_interior_design(image_path: str, preferences: Dict[str, Any]) -> Tu
         raise Exception(f"API Request failed: {error_msg}")
     except Exception as e:
         raise Exception(f"Failed to generate interior design: {str(e)}")
-
-# def upload_to_supabase(image_file):
-#     try:
-#         logger.info("Initializing S3 client for Supabase")
-        
-#         # Initialize a session using Supabase S3 credentials
-#         s3 = boto3.client(
-#             service_name='s3',
-#             region_name=os.getenv('SUPERBASE_REGION'),
-#             endpoint_url=os.getenv('SUPERBASE_ENDPOINT'),
-#             aws_access_key_id=os.getenv('SUPERBASE_ACCESS_KEY'),
-#             aws_secret_access_key=os.getenv('SUPERBASE_SECRET_KEY')
-#         )
-
-#         with open("/home/usman/Downloads/layout.png", 'rb') as f:
-#             s3.upload_fileobj(f, Bucket=os.getenv('SUPERBASE_BUCKET'), Key=image_file.name)
-        
-
-#     except NoCredentialsError:
-#         logger.error("Credentials not available.")
-#         raise Exception("Credentials not available.")
-#     except Exception as e:
-#         logger.error(f"Error uploading to Supabase: {str(e)}")
-#         raise Exception(f"Error uploading to Supabase: {str(e)}")

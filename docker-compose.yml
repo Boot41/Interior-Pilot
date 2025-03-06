@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: interior_pilot
+      POSTGRES_USER: usmanmufti
+      POSTGRES_PASSWORD: 1234567890
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      AWS_BUCKET_NAME: interior-pilot
+      AWS_REGION: ap-south-1
+      AWS_ACCESS_KEY_ID: AKIA34AMDGM5RKE45URB
+      AWS_SECRET_ACCESS_KEY: rf4bA0r0Bly2kpd2qyuuyWjdxpFMPxtQMr0vmTto
+      REPLICATE_API_TOKEN: r8_CTYHEQK85783jCIxUUQQhVCkhAqvWLx1UYXQw
+      DJANGO_SECRET_KEY: your_django_secret_key
+      DEBUG: 'True'
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgres://usmanmufti:1234567890@db:5432/interior_pilot
+      POSTGRES_DB: interior_pilot
+      POSTGRES_USER: usmanmufti
+      POSTGRES_PASSWORD: 1234567890
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api
+    command: npm run dev -- --host
+
+volumes:
+  postgres_data:
