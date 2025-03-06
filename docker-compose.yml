@@ -1,15 +1,4 @@
 services:
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: interior_pilot
-      POSTGRES_USER: usmanmufti
-      POSTGRES_PASSWORD: 1234567890
-    ports:
-      - "5432:5432"
-
   backend:
     build:
       context: .
@@ -18,8 +7,6 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     environment:
       AWS_BUCKET_NAME: interior-pilot
       AWS_REGION: ap-south-1
@@ -30,11 +17,7 @@ services:
       DEBUG: 'True'
       ALLOWED_HOSTS: localhost,127.0.0.1
       DATABASE_URL: postgres://usmanmufti:1234567890@db:5432/interior_pilot
-      POSTGRES_DB: interior_pilot
-      POSTGRES_USER: usmanmufti
-      POSTGRES_PASSWORD: 1234567890
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
+
 
   frontend:
     build:
@@ -47,6 +30,3 @@ services:
     environment:
       - VITE_API_BASE_URL=http://localhost:8000/api
     command: npm run dev -- --host
-
-volumes:
-  postgres_data:
