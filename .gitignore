@@ -52,3 +52,10 @@ Thumbs.db
 *.png
 *.jpg
 *.jpeg
+
+#TF
+*.tfstate
+!terraform.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfplan

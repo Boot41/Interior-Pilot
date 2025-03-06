@@ -61,11 +61,11 @@ def generate_prompt(preferences: Dict[str, Any], layout_description: str = "") -
     """
     Generate a detailed prompt based on user preferences and room layout
     """
-    style = preferences['style'].name
+    style = preferences['style'].replace('_', ' ').title()
     room_type = preferences['floor_plan'].room_type.replace('_', ' ').title()
     color_scheme = preferences['color_scheme']
     budget_level = preferences['budget_level'].replace('_', ' ').title()
-    lighting = preferences['lighting_preference']
+    lighting = preferences['lighting_preference'].replace('_', ' ').title()
     
     base_prompt = f"Generate a highly realistic 3D-rendered {room_type} interior design"
     style_prompt = f"in {style} style with {color_scheme} color scheme"

@@ -12,7 +12,6 @@ from .serializers import (
     FloorPlanSerializer, InteriorDesignSerializer, DesignStyleSerializer,
     DesignPreferenceSerializer, DesignGenerationRequestSerializer, RoomDesignRequestSerializer
 )
-from .utils import generate_interior_design
 from rest_framework.views import APIView
 from .serializers import Generate3DLayoutRequestSerializer
 import replicate
@@ -214,79 +213,59 @@ class InteriorDesignViewSet(viewsets.ReadOnlyModelViewSet):
 @api_view(['POST'])
 def generate_design(request):
     try:
-        # Validate request data
         serializer = DesignGenerationRequestSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Save floor plan
-        floor_plan_image = serializer.validated_data['floor_plan_image']
-        file_name = f"floorplans/{time.time()}_{floor_plan_image.name}"
-        file_path = default_storage.save(file_name, floor_plan_image)
-        
-        # Create floor plan record
-        floor_plan = FloorPlan.objects.create(
-            image=file_path,
-            room_type=serializer.validated_data['room_type'],
-            area_sqft=serializer.validated_data['area_sqft']
-        )
-        
-        # Create design preferences
-        preferences = DesignPreference.objects.create(
-            floor_plan=floor_plan,
-            style=serializer.validated_data['style'],
-            color_scheme=serializer.validated_data['color_scheme'],
-            budget_level=serializer.validated_data['budget_level'],
-            lighting_preference=serializer.validated_data['lighting_preference'],
-            additional_notes=serializer.validated_data.get('additional_notes', '')
-        )
-        
-        # Create interior design record
-        interior_design = InteriorDesign.objects.create(
-            floor_plan=floor_plan,
-            preferences=preferences,
-            status='processing'
-        )
-        
-        try:
-            # Start timing
-            start_time = time.time()
+        if serializer.is_valid():
+            # Configure Replicate client with API token
+            replicate.Client(api_token=os.getenv('REPLICATE_API_TOKEN'))
             
-            # Generate interior design
-            generated_image_path, prompt = generate_interior_design(
-                floor_plan.image.path,
-                {
-                    'style': preferences.style,
-                    'floor_plan': floor_plan,
-                    'color_scheme': preferences.color_scheme,
-                    'budget_level': preferences.budget_level,
-                    'lighting_preference': preferences.lighting_preference,
-                    'additional_notes': preferences.additional_notes
-                }
+            # Format the prompt
+            prompt = f"""A high quality resolution image of a {serializer.validated_data['theme']}-themed {serializer.validated_data['room_type']} with a {serializer.validated_data['color']} 
+                    color design with the following instructions: {serializer.validated_data['additional_notes']}"""
+            
+            input_data = {
+                "image": serializer.validated_data['image'],
+                "prompt": prompt,
+            }
+            
+            # Run the model
+            output = replicate.run(
+                "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+                input=input_data
             )
             
-            # Update interior design record
-            # Convert PosixPath to string and handle path properly
-            relative_path = os.path.relpath(str(generated_image_path), settings.MEDIA_ROOT)
-            interior_design.generated_image = relative_path
-            interior_design.prompt_used = prompt
-            interior_design.processing_time = time.time() - start_time
-            interior_design.status = 'completed'
-            interior_design.save()
+            # Generate unique filename
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            unique_id = uuid.uuid4().hex[:8]
+            filename = f"roomdesign_{timestamp}_{unique_id}.png"
+            file_path = os.path.join('roomdesign', filename)
             
-            return Response(
-                InteriorDesignSerializer(interior_design).data,
-                status=status.HTTP_201_CREATED
-            )
-            
-        except Exception as e:
-            interior_design.status = 'failed'
-            interior_design.save()
-            return Response({
-                'error': f'Design generation failed: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Upload to S3
+            try:
+                s3_client.put_object(
+                    Bucket=AWS_BUCKET_NAME,
+                    Key=file_path,
+                    Body=output.read(),
+                    ContentType='image/png'
+                )
+                
+                file_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{file_path}"
+                return Response({
+                    'url': file_url,
+                    'message': 'Room design generated successfully'
+                }, status=status.HTTP_200_OK)
+                
+            except Exception as e:
+                logger.error(f"Error uploading to S3: {str(e)}")
+                return Response(
+                    {'error': 'Failed to upload generated image'}, 
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     except Exception as e:
-        return Response({
-            'error': f'Request processing failed: {str(e)}'
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        logger.error(f"Error in room design generation: {str(e)}")
+        return Response(
+            {'error': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

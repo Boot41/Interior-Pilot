@@ -1,6 +1,13 @@
 from rest_framework import serializers
 from .models import FloorPlan, InteriorDesign, DesignStyle, DesignPreference
 
+class DesignGenerationRequestSerializer(serializers.Serializer):
+    image = serializers.URLField(required=True)
+    theme = serializers.CharField(required=True)
+    room_type = serializers.CharField(required=True)
+    color = serializers.CharField(required=True)
+    additional_notes = serializers.CharField(required=False, allow_blank=True)
+
 class RoomDesignRequestSerializer(serializers.Serializer):
     image = serializers.URLField(required=True)
     theme = serializers.CharField(required=True)
@@ -48,19 +55,6 @@ class InteriorDesignSerializer(serializers.ModelSerializer):
             'edge_map', 'prompt_used', 'created_at', 'processing_time',
             'status'
         ]
-
-class DesignGenerationRequestSerializer(serializers.Serializer):
-    floor_plan_image = serializers.ImageField()
-    room_type = serializers.ChoiceField(choices=FloorPlan._meta.get_field('room_type').choices)
-    area_sqft = serializers.IntegerField(min_value=50)
-    style = serializers.PrimaryKeyRelatedField(queryset=DesignStyle.objects.all())
-    color_scheme = serializers.CharField(max_length=100)
-    budget_level = serializers.ChoiceField(
-        choices=DesignPreference._meta.get_field('budget_level').choices
-    )
-    lighting_preference = serializers.ChoiceField(
-        choices=DesignPreference._meta.get_field('lighting_preference').choices
-    )
 
 class RoomDesignRequestSerializer(serializers.Serializer):
     image = serializers.URLField(required=True)

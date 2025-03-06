@@ -28,18 +28,8 @@ class FloorPlan(models.Model):
 
 class DesignPreference(models.Model):
     floor_plan = models.OneToOneField(FloorPlan, on_delete=models.CASCADE)
-    style = models.ForeignKey(DesignStyle, on_delete=models.PROTECT)
-    color_scheme = models.CharField(max_length=100)
-    budget_level = models.CharField(max_length=20, choices=[
-        ('budget', 'Budget'),
-        ('mid_range', 'Mid Range'),
-        ('luxury', 'Luxury')
-    ])
-    lighting_preference = models.CharField(max_length=20, choices=[
-        ('bright', 'Bright'),
-        ('moderate', 'Moderate'),
-        ('dim', 'Dim')
-    ])
+    theme = models.CharField(max_length=100, default='Modern')
+    color = models.CharField(max_length=100, default='Neutral')
     additional_notes = models.TextField(blank=True)
 
 class InteriorDesign(models.Model):
