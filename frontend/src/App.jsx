@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Upload from "./pages/Upload";
 import GenerateLayout from "./pages/GenerateLayout";
+import RoomDesign from "./pages/RoomDesign";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/generate-layout" element={<GenerateLayout />} />
+        <Route path="/room-design" element={<RoomDesign />} />
       </Routes>
     </Router>
   );

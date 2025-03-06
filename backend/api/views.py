@@ -10,7 +10,7 @@ from django.conf import settings
 from .models import FloorPlan, InteriorDesign, DesignStyle, DesignPreference
 from .serializers import (
     FloorPlanSerializer, InteriorDesignSerializer, DesignStyleSerializer,
-    DesignPreferenceSerializer, DesignGenerationRequestSerializer
+    DesignPreferenceSerializer, DesignGenerationRequestSerializer, RoomDesignRequestSerializer
 )
 from .utils import generate_interior_design, upload_to_supabase
 from rest_framework.views import APIView
@@ -74,6 +74,67 @@ class UploadImageView(APIView):
                 )
             
         except Exception as e:
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class RoomDesignView(APIView):
+    def post(self, request):
+        try:
+            serializer = RoomDesignRequestSerializer(data=request.data)
+            if serializer.is_valid():
+                # Configure Replicate client with API token
+                replicate.Client(api_token=os.getenv('REPLICATE_API_TOKEN'))
+                
+                # Format the prompt
+                prompt = f"""Generate a high quality resolution image of a {serializer.validated_data['theme']}-themed {serializer.validated_data['room_type']} with a {serializer.validated_data['color']} 
+                        color design with {serializer.validated_data['accessories']}. With these furniture {serializer.validated_data['furniture']}. Soft rugs, {serializer.validated_data['walls']} walls, and 
+                        {serializer.validated_data['lights']} create warmth, making it {serializer.validated_data['realistic']}."""
+                
+                input_data = {
+                    "image": serializer.validated_data['image'],
+                    "prompt": prompt,
+                }
+                
+                # Run the model
+                output = replicate.run(
+                    "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+                    input=input_data
+                )
+                
+                # Generate unique filename
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                unique_id = uuid.uuid4().hex[:8]
+                filename = f"roomdesign_{timestamp}_{unique_id}.png"
+                file_path = os.path.join('roomdesign', filename)
+                
+                # Upload to S3
+                try:
+                    s3_client.put_object(
+                        Bucket=AWS_BUCKET_NAME,
+                        Key=file_path,
+                        Body=output.read(),
+                        ContentType='image/png'
+                    )
+                    
+                    file_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{file_path}"
+                    return Response({
+                        'url': file_url,
+                        'message': 'Room design generated successfully'
+                    }, status=status.HTTP_200_OK)
+                    
+                except Exception as e:
+                    logger.error(f"Error uploading to S3: {str(e)}")
+                    return Response(
+                        {'error': 'Failed to upload generated image'}, 
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Exception as e:
+            logger.error(f"Error in room design generation: {str(e)}")
             return Response(
                 {'error': str(e)}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

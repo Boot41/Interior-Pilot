@@ -1,6 +1,17 @@
 from rest_framework import serializers
 from .models import FloorPlan, InteriorDesign, DesignStyle, DesignPreference
 
+class RoomDesignRequestSerializer(serializers.Serializer):
+    image = serializers.URLField(required=True)
+    theme = serializers.CharField(required=True)
+    room_type = serializers.CharField(required=True)
+    color = serializers.CharField(required=True)
+    accessories = serializers.CharField(required=True)
+    furniture = serializers.CharField(required=True)
+    walls = serializers.CharField(required=True)
+    lights = serializers.CharField(required=True)
+    realistic = serializers.CharField(required=True)
+
 class Generate3DLayoutRequestSerializer(serializers.Serializer):
     image = serializers.URLField(required=True)
     prompt = serializers.CharField(required=True)
@@ -50,4 +61,15 @@ class DesignGenerationRequestSerializer(serializers.Serializer):
     lighting_preference = serializers.ChoiceField(
         choices=DesignPreference._meta.get_field('lighting_preference').choices
     )
+
+class RoomDesignRequestSerializer(serializers.Serializer):
+    image = serializers.URLField(required=True)
+    theme = serializers.CharField(required=True)
+    room_type = serializers.CharField(required=True)
+    color = serializers.CharField(required=True)
+    accessories = serializers.CharField(required=True)
+    furniture = serializers.CharField(required=True)
+    walls = serializers.CharField(required=True)
+    lights = serializers.CharField(required=True)
+    realistic = serializers.CharField(required=True)
     additional_notes = serializers.CharField(required=False, allow_blank=True)

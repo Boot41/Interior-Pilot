@@ -96,9 +96,8 @@ const Upload = () => {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto text-center space-y-8 relative z-10"
       >
-        <span className="text-[#B8860B] text-sm font-semibold uppercase tracking-wider">Interior Pilot</span>
         <h1 className="text-6xl font-extrabold text-[#8B4513] leading-tight">
-          Create Your Dream Interior Design
+          Use Your Inspirations to Generate a Design
         </h1>
         <div className="h-1 w-32 mx-auto bg-gradient-to-r from-[#DAA520] to-[#B8860B] rounded-full mt-6"></div>
         <p className="text-xl text-[#6B4423] font-light">Transform your space with AI-powered interior design.</p>
