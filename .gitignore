@@ -56,5 +56,6 @@ Thumbs.db
 #TF
 *.tfstate
 *.tfstate.backup
+/etc/deploy/terraform.tfstate
 *.tfvars
 *.tfplan
