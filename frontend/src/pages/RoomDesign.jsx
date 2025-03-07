@@ -68,14 +68,14 @@ const RoomDesign = () => {
             const imageFormData = new FormData();
             imageFormData.append('image', image);
 
-            const uploadResponse = await axios.post('http://localhost:8000/api/upload-image/', imageFormData, {
+            const uploadResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/upload-image/`, imageFormData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             const imageUrl = uploadResponse.data.url;
 
             // Then generate the room design
-            const response = await axios.post('http://localhost:8000/api/room-design/', {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/room-design/`, {
                 ...formData,
                 image: imageUrl
             });

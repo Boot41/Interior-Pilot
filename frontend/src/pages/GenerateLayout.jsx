@@ -31,13 +31,13 @@ const GenerateLayout = () => {
             const formData = new FormData();
             formData.append('image', image);
 
-            const uploadResponse = await axios.post('http://localhost:8000/api/upload-image/', formData, {
+            const uploadResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/upload-image/`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             const imageUrl = uploadResponse.data.url;
 
-            const response = await axios.post('http://localhost:8000/api/generate-3d-layout/', {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/generate-3d-layout/`, {
                 image: imageUrl,
                 prompt: prompt,
             }, {

@@ -31,6 +31,8 @@ class DesignPreference(models.Model):
     theme = models.CharField(max_length=100, default='Modern')
     color = models.CharField(max_length=100, default='Neutral')
     additional_notes = models.TextField(blank=True)
+    def __str__(self):
+        return f"Preferences for {self.floor_plan.room_type} - {self.floor_plan.uploaded_at}"
 
 class InteriorDesign(models.Model):
     floor_plan = models.ForeignKey(FloorPlan, on_delete=models.CASCADE)

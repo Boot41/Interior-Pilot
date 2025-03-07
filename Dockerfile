@@ -1,5 +1,6 @@
 # Stage 1: Frontend build
 FROM node:20-alpine AS frontend-build
+ENV VITE_API_BASE_URL=https://interior-pilot-mha4s7stfa-el.a.run.app/api
 WORKDIR /frontend
 COPY frontend/package*.json ./
 RUN npm install
